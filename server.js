@@ -2,13 +2,16 @@ const express = require('express');
 const { ExpressHandlebars } = require('express-handlebars');
 const path = require('path');
 const hbs = require('express-handlebars');
+const  multer = require('multer')
+const upload = multer({dest:'uploads/'})
 
 
 const app = express();
 
+
 app.engine('hbs', hbs())
 app.set('view engine', 'hbs');
-app.use(express.urlencoded({extended: false})) //obsługa formularzy jeeli chcemy obsługiwacw formacie Json to wtedy app.use(express.json());
+app.use(express.json({extended: false})) //obsługa formularzy jeeli chcemy obsługiwacw formacie Json to wtedy app.use(express.json());
 
 
 // app.use('/admin',(req, res, next) =>{
@@ -31,12 +34,12 @@ app.get('/',(req, res) => {
 app.get('/podaj/:imie',(req,res) =>{
     res.send(`hello ${req.params.imie}`)
 })
-app.post('/contact/send-message',(req, res) => {
-    const {author,sender,title,message} = (req.body);
-    if(author && sender && title && message){
-        res.send('contact',{isSent: true})
+app.post('/contact/send-message', upload.single('obraz'), (req, res) => {
+    const {author,sender,title,message,obraz} = (req.body);
+    if(author && sender && title && message && req.file.originalname){
+        res.render('contact',{isSent: true, obraz: req.file.originalname})
     }else{
-        res.send('contact',{isError: true})
+        res.render('contact',{isError: true})
     }
 });
 

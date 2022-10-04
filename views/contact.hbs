@@ -1,7 +1,7 @@
 <h2>Contact</h2>
 <p>Send me an email at mocadamdo@gmail.com</p>
 <h2>Contact me</h2>
-<form action="/contact/send-message" method="POST">
+<form action="/contact/send-message" method="POST" enctype="multipart/form-data">
     <label>
         Your name: <input type="text" name="author">
     </label>
@@ -14,15 +14,21 @@
     <label>
         Message: <textarea name="message"></textarea>
     </label>
+    <label>
+        Object .jpg, .gif, .png: <input type="file" name="obraz" accept=".jpg, .png, .gif">
+    </label>
     <button type="submit">Send message</button> 
 </form>
-{{#if !isSent}}   
+{{#if isSent}}   
     <div >
         <h1>The message has been sent</h1>
+        <h1>{{obraz}}</h1>
     </div>
-{{/if }}
+{{/if}}
+{{#if isError}}
     <div class="isError">
         <h1>You can\'t leave fields empty!</h1>
     </div>
+{{/if}}
 
 
