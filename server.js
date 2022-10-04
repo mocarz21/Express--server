@@ -1,7 +1,6 @@
 const express = require('express');
 const { ExpressHandlebars } = require('express-handlebars');
 const path = require('path');
-const html = require('express-handlebars');
 const hbs = require('express-handlebars');
 
 
@@ -9,6 +8,7 @@ const app = express();
 
 app.engine('hbs', hbs())
 app.set('view engine', 'hbs');
+app.use(express.urlencoded({extended: false})) //obsługa formularzy jeeli chcemy obsługiwacw formacie Json to wtedy app.use(express.json());
 
 
 // app.use('/admin',(req, res, next) =>{
@@ -31,6 +31,15 @@ app.get('/',(req, res) => {
 app.get('/podaj/:imie',(req,res) =>{
     res.send(`hello ${req.params.imie}`)
 })
+app.post('/contact/send-message',(req, res) => {
+    const {author,sender,title,message} = (req.body);
+    if(author && sender && title && message){
+        res.send('contact',{isSent: true})
+    }else{
+        res.send('contact',{isError: true})
+    }
+});
+
 app.get('/hello/:name',(req, res) =>{
     res.render('hello', {layout: false, name: req.params.name});
 });
