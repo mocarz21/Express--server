@@ -36,12 +36,17 @@ app.get('/podaj/:imie',(req,res) =>{
 })
 app.post('/contact/send-message', upload.single('obraz'), (req, res) => {
     const {author,sender,title,message,obraz} = (req.body);
-    if(author && sender && title && message && req.file.originalname){
+    if(author && sender && title && message && req.file){
         res.render('contact',{isSent: true, obraz: req.file.originalname})
     }else{
         res.render('contact',{isError: true})
     }
 });
+
+app.get('/home',(req,res) => {  
+    res.render('index',{layout: 'dark' })
+    //res.show('about.html')
+});    
 
 app.get('/hello/:name',(req, res) =>{
     res.render('hello', {layout: false, name: req.params.name});
